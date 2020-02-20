@@ -1,35 +1,41 @@
 package com.example.contactapp
 
+import android.app.SearchManager
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ListView
+import android.widget.*
 import androidx.appcompat.widget.Toolbar
 
 class MainActivity : AppCompatActivity() {
 
     var lista:ListView? = null
-    var adaptador:AdaptadorCustom? = null
+    var grid:GridView? = null
+    var viewSwitcher:ViewSwitcher? = null
 
     companion object{
         var contactos:ArrayList<Contact>? = null
+        var adaptador:AdaptadorCustom? = null
+        var adaptadorGrid:AdaptadorCustomGrid? = null
 
         fun addContact(contacto:Contact){
-            contactos?.add(contacto)
-
+            adaptador?.addItem(contacto)
+            adaptadorGrid?.addItem(contacto)
         }
         fun obtenerContacto(index:Int):Contact{
-            return contactos?.get(index)!!
+            return adaptador?.getItem(index) as Contact
         }
 
         fun eliminarContacto(index:Int){
-            contactos?.removeAt(index)
+            adaptador?.removeItem(index)
+            adaptadorGrid?.removeItem(index)
         }
 
         fun actualizarContacto(index:Int, nuevoContacto: Contact){
-            contactos?.set(index, nuevoContacto)
+            adaptador?.updateItem(index, nuevoContacto)
         }
     }
 
@@ -46,11 +52,20 @@ class MainActivity : AppCompatActivity() {
         contactos?.add(Contact("Mario", "Castaño", "Holap. :)", 21, 54.17F, "Jejeje 223", "11233214", "mario@yopmail.com", R.drawable.foto_03))
 
         lista = findViewById<ListView>(R.id.lista)
+        grid = findViewById<GridView>(R.id.grid)
         adaptador = AdaptadorCustom(this, contactos!!)
+        adaptadorGrid = AdaptadorCustomGrid(this, contactos!!)
+        viewSwitcher = findViewById(R.id.switch_view)
 
         lista?.adapter = adaptador
+        grid?.adapter = adaptadorGrid
 
         lista?.setOnItemClickListener { parent, view, position, id ->
+            val intent = Intent(this, Detalle::class.java)
+            intent.putExtra("ID", position.toString())
+            startActivity(intent)
+        }
+        grid?.setOnItemClickListener { parent, view, position, id ->
             val intent = Intent(this, Detalle::class.java)
             intent.putExtra("ID", position.toString())
             startActivity(intent)
@@ -59,6 +74,37 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
+        val itemSwitch = menu?.findItem(R.id.switch_view)
+        itemSwitch?.setActionView(R.layout.switch_item)
+        val switchView = itemSwitch?.actionView?.findViewById<Switch>(R.id.sCambiaVista)
+
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val itemBusqueda = menu?.findItem(R.id.searchView)
+        val searchView = itemBusqueda?.actionView as SearchView
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
+
+        searchView.queryHint = "Buscar contacto..."
+        searchView.setOnQueryTextFocusChangeListener { v, hasFocus ->
+
+        }
+
+        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextChange(newText:String?):Boolean{
+                //filtrar
+                adaptador?.filtrar(newText!!)
+                adaptadorGrid?.filtrar(newText!!)
+                return true
+            }
+            override fun onQueryTextSubmit(query:String?):Boolean{
+                //filtrar
+                return true
+            }
+        })
+
+        switchView?.setOnCheckedChangeListener { buttonView, isChecked ->
+            viewSwitcher?.showNext()
+        }
+
         return super.onCreateOptionsMenu(menu)
     }
 

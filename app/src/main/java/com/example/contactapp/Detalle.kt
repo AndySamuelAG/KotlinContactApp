@@ -3,7 +3,6 @@ package com.example.contactapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
@@ -71,7 +70,7 @@ class Detalle : AppCompatActivity() {
         val telefono = findViewById<TextView>(R.id.tvTelefono)
         val email = findViewById<TextView>(R.id.tvEmail)
         val direccion = findViewById<TextView>(R.id.tvDireccion)
-        val ivFoto = findViewById<ImageView>(R.id.ivFoto)
+        val ivFoto = findViewById<ImageView>(R.id.ivPhoto)
 
         nombre.text = contacto.nombre + " " + contacto.apellidos
         estado.text = contacto.estado

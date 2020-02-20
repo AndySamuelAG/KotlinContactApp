@@ -17,7 +17,7 @@
         tools:ignore="MissingConstraints" />
 
     <ImageView
-        android:id="@+id/ivFoto"
+        android:id="@+id/ivPhoto"
         android:layout_width="0dp"
         android:layout_height="250dp"
         android:layout_marginStart="16dp"
@@ -58,7 +58,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.196"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivFoto" />
+        app:layout_constraintTop_toBottomOf="@+id/ivPhoto" />
 
     <EditText
         android:id="@+id/tvApellidos"
@@ -75,7 +75,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.114"
         app:layout_constraintStart_toEndOf="@+id/tvNombre"
-        app:layout_constraintTop_toBottomOf="@+id/ivFoto"
+        app:layout_constraintTop_toBottomOf="@+id/ivPhoto"
         app:layout_constraintVertical_bias="0.0" />
 
     <EditText

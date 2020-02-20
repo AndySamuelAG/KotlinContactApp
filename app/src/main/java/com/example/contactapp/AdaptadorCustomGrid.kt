@@ -8,9 +8,8 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 
-class AdaptadorCustom(var context: Context, items:ArrayList<Contact>): BaseAdapter() {
-
-    var items:ArrayList<Contact>?= null
+class AdaptadorCustomGrid(var context: Context, items:ArrayList<Contact>): BaseAdapter(){
+    var items:ArrayList<Contact>? = null
     var copiaItems:ArrayList<Contact>? = null
 
     init {
@@ -23,7 +22,7 @@ class AdaptadorCustom(var context: Context, items:ArrayList<Contact>): BaseAdapt
         var vista:View? = convertView
 
         if(vista == null){
-            vista = LayoutInflater.from(context).inflate(R.layout.template_contacto,  null)
+            vista = LayoutInflater.from(context).inflate(R.layout.template_contacto_grid,  null)
             viewHolder = ViewHolder(vista)
             vista.tag = viewHolder
         }else{
@@ -33,8 +32,6 @@ class AdaptadorCustom(var context: Context, items:ArrayList<Contact>): BaseAdapt
         val item = getItem(position) as Contact
 
         viewHolder?.nombre?.text = item.nombre + " " + item.apellidos
-        viewHolder?.estado?.text = item.estado
-        viewHolder?.numero?.text = item.telefono
         viewHolder?.foto?.setImageResource(item.foto)
 
         return vista!!
@@ -96,12 +93,8 @@ class AdaptadorCustom(var context: Context, items:ArrayList<Contact>): BaseAdapt
     private class ViewHolder(vista:View){
         var nombre: TextView? = null
         var foto: ImageView? = null
-        var estado:TextView? = null
-        var numero:TextView? = null
         init {
-            this.nombre = vista.findViewById(R.id.tvDireccion)
-            this.estado = vista.findViewById(R.id.tvEstado)
-            this.numero = vista.findViewById(R.id.tvNumero)
+            this.nombre = vista.findViewById(R.id.tvNombre)
             this.foto = vista.findViewById(R.id.ivPhoto)
         }
     }
